@@ -1,0 +1,74 @@
+show databases;  #展示所有数据表
+create database db1;  #创建数据库db1
+drop database bd1;
+use db1;
+create table student();     #创建数据表student
+insert Book values('B200301004','003','算法设计与分析','陈慧南','科学出版社','P1993010100010004',58.20,'19930104','19950114',190);  #输入表格数据
+show tables;   #展示表格
+
+练习表格
+create database SQL_pr;
+use SQL-pr;
+show databases;
+creat table emp();
+insert into emp() values;
+CREATE TABLE emp
+(
+    EMPNO int NOT NULL,
+    ENAME VARCHAR (20) NOT NULL,
+    JOB VARCHAR (20) NOT NULL,
+    MGR int NULL,
+    HIREDATE VARCHAR (20) NOT NULL,
+    SAL int NOT NULL,
+    COMM int NULL,
+    DEPTNO int NOT NULL
+    -- specify more columns here
+);
+INSERT INTO emp
+( EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO)
+VALUES
+( 
+ 7369, "SMITH", "CLERK", 7902, "17-DEC-1980", 800, NULL, 20
+),
+( 
+ 7499, "ALLEN", "SALESMAN", 7698, "20-FEB-1981", 1600, 300, 30
+),
+( 
+ 7521, "WARD", "SALESMAN", 7698, "22-FEB-1981", 1250, 500, 30
+),
+( 
+ 7566, "JONES", "MANAGER", 7839, "02-APR-1981", 2975, NULL, 20
+),
+( 
+ 7654, "MARTIN", "SALESMAN", 7698, "28-SEP-1981", 1250, 1400, 30
+),
+( 
+ 7698, "BLAKE", "MANAGER", 7839, "01-MAY-1981", 2850, NULL, 30
+),
+( 
+ 7782, "CLARK", "MANAGER", 7839, "09-JUN-1981", 2450, NULL, 10
+),
+( 
+ 7788, "SCOTT", "ANALYST", 7566, "09-DEC-1982", 3000, NULL, 20
+),
+( 
+ 7839, "KING", "PRESIDENT", null, "17-NOV-1981", 5000, NULL, 10
+),
+( 
+ 7844, "TURNER", "SALESMAN", 7698, "08-SEP-1981", 1500, 0, 30
+),
+( 
+ 7876, "ADAMS", "CLERK", 7788, "12-JAN-1983", 1100, NULL, 20
+),
+( 
+ 7900, "JAMES", "CLERK", 7698, "03-DEC-1981", 950, NULL, 30
+),
+( 
+ 7902, "FORD", "ANALYST", 7566, "03-DEC-1981", 3000, NULL, 20
+),
+( 
+ 7934, "MILLER", "CLERK", 7782, "23-JAN-1982", 1300, NULL, 10
+) ;
+
+#数据连接https://blog.csdn.net/weixin_40516558/article/details/96157472?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-9.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-9.no_search_link
+
