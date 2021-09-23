@@ -1,0 +1,27 @@
+mysql> #条件逻辑（根据值满足的条件，返回不同的值）---case
+mysql> #status是起的别名
+mysql> select ename,sal,case
+    -> when sal<=2000 then 'UNDERPAID'
+    -> when sal>=4000 then 'OVERPAID'
+    -> else 'OK'
+    -> end as status
+    -> from emp;
++--------+------+-----------+
+| ename  | sal  | status    |
++--------+------+-----------+
+| SMITH  |  800 | UNDERPAID |
+| ALLEN  | 1600 | UNDERPAID |
+| WARD   | 1250 | UNDERPAID |
+| JONES  | 2975 | OK        |
+| MARTIN | 1250 | UNDERPAID |
+| BLAKE  | 2850 | OK        |
+| CLARK  | 2450 | OK        |
+| SCOTT  | 3000 | OK        |
+| KING   | 5000 | OVERPAID  |
+| TURNER | 1500 | UNDERPAID |
+| ADAMS  | 1100 | UNDERPAID |
+| JAMES  |  950 | UNDERPAID |
+| FORD   | 3000 | OK        |
+| MILLER | 1300 | UNDERPAID |
++--------+------+-----------+
+14 rows in set (0.00 sec)
