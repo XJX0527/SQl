@@ -1,0 +1,24 @@
+mysql> #根据子串排序---substr
+mysql> select ename,job
+    -> from emp
+    -> order by
+    -> substr(job,length(job)-2);    #根据job字符串的后3个字符进行排序
++--------+-----------+
+| ename  | job       |
++--------+-----------+
+| KING   | PRESIDENT |
+| SMITH  | CLERK     |
+| ADAMS  | CLERK     |
+| JAMES  | CLERK     |
+| MILLER | CLERK     |
+| JONES  | MANAGER   |
+| BLAKE  | MANAGER   |
+| CLARK  | MANAGER   |
+| ALLEN  | SALESMAN  |
+| WARD   | SALESMAN  |
+| MARTIN | SALESMAN  |
+| TURNER | SALESMAN  |
+| SCOTT  | ANALYST   |
+| FORD   | ANALYST   |
++--------+-----------+
+14 rows in set (0.01 sec)

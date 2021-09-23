@@ -1,0 +1,7 @@
+mysql> #and 数据并集;
+mysql> #or 数据交集;
+mysql> select * from emp
+    -> where (deptno=10
+    -> or mgr is NULL
+    -> or sal <=2000)
+    ->  and  deptno=20;

@@ -1,0 +1,15 @@
+mysql> #查询随机行数---rand()
+mysql> select ename,job
+    -> from emp
+    -> order by rand()
+    -> limit 5;
++-------+----------+
+| ename | job      |
++-------+----------+
+| ADAMS | CLERK    |
+| BLAKE | MANAGER  |
+| WARD  | SALESMAN |
+| SMITH | CLERK    |
+| CLARK | MANAGER  |
++-------+----------+
+5 rows in set (0.01 sec)

@@ -1,0 +1,30 @@
+mysql> #from 子句比where 子句先执行,where 子句比select子句先执行
+mysql> #as---创建别名;
+mysql> #如何在where子句中应用别名?---内嵌视图
+
+mysql> select * from
+    -> (
+    -> select sal as salary,job
+    -> from emp
+    -> ) x
+    -> where salary<5000;
+mysql> #x为内嵌式图别名
+
++--------+----------+
+| salary | job      |
++--------+----------+
+|    800 | CLERK    |
+|   1600 | SALESMAN |
+|   1250 | SALESMAN |
+|   2975 | MANAGER  |
+|   1250 | SALESMAN |
+|   2850 | MANAGER  |
+|   2450 | MANAGER  |
+|   3000 | ANALYST  |
+|   1500 | SALESMAN |
+|   1100 | CLERK    |
+|    950 | CLERK    |
+|   3000 | ANALYST  |
+|   1300 | CLERK    |
++--------+----------+
+13 rows in set (0.02 sec)

@@ -1,0 +1,51 @@
+mysql> #以指定顺序返回查询结果--order by
+mysql> select ename,job,sal
+    -> from emp
+    -> where deptno=10
+    -> order by sal desc;
++--------+-----------+------+
+| ename  | job       | sal  |
++--------+-----------+------+
+| KING   | PRESIDENT | 5000 |
+| CLARK  | MANAGER   | 2450 |
+| MILLER | CLERK     | 1300 |
++--------+-----------+------+
+3 rows in set (0.00 sec)
+
+mysql> select ename,job,sal
+    -> from emp
+    -> where deptno=10
+    -> order by 3 desc;    #3对应的是第三列的意思
++--------+-----------+------+
+| ename  | job       | sal  |
++--------+-----------+------+
+| KING   | PRESIDENT | 5000 |
+| CLARK  | MANAGER   | 2450 |
+| MILLER | CLERK     | 1300 |
++--------+-----------+------+
+3 rows in set (0.00 sec)
+
+==============================多字段排序=================
+
+mysql> select empno,deptno,sal,ename,job
+    -> from emp
+    -> order by deptno,sal desc;
++-------+--------+------+--------+-----------+
+| empno | deptno | sal  | ename  | job       |
++-------+--------+------+--------+-----------+
+|  7839 |     10 | 5000 | KING   | PRESIDENT |
+|  7782 |     10 | 2450 | CLARK  | MANAGER   |
+|  7934 |     10 | 1300 | MILLER | CLERK     |
+|  7788 |     20 | 3000 | SCOTT  | ANALYST   |
+|  7902 |     20 | 3000 | FORD   | ANALYST   |
+|  7566 |     20 | 2975 | JONES  | MANAGER   |
+|  7876 |     20 | 1100 | ADAMS  | CLERK     |
+|  7369 |     20 |  800 | SMITH  | CLERK     |
+|  7698 |     30 | 2850 | BLAKE  | MANAGER   |
+|  7499 |     30 | 1600 | ALLEN  | SALESMAN  |
+|  7844 |     30 | 1500 | TURNER | SALESMAN  |
+|  7521 |     30 | 1250 | WARD   | SALESMAN  |
+|  7654 |     30 | 1250 | MARTIN | SALESMAN  |
+|  7900 |     30 |  950 | JAMES  | CLERK     |
++-------+--------+------+--------+-----------+
+14 rows in set (0.00 sec)

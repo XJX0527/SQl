@@ -1,0 +1,54 @@
+mysql> #根据条件逻辑动态调整排序项---order 中嵌套 case语句
+mysql> select ename,sal,job,comm
+    -> from emp
+    -> order by
+    -> case when job='salesman' then comm
+    -> else sal
+    -> end;
++--------+------+-----------+------+
+| ename  | sal  | job       | comm |
++--------+------+-----------+------+
+| TURNER | 1500 | SALESMAN  |    0 |
+| ALLEN  | 1600 | SALESMAN  |  300 |
+| WARD   | 1250 | SALESMAN  |  500 |
+| SMITH  |  800 | CLERK     | NULL |
+| JAMES  |  950 | CLERK     | NULL |
+| ADAMS  | 1100 | CLERK     | NULL |
+| MILLER | 1300 | CLERK     | NULL |
+| MARTIN | 1250 | SALESMAN  | 1400 |
+| CLARK  | 2450 | MANAGER   | NULL |
+| BLAKE  | 2850 | MANAGER   | NULL |
+| JONES  | 2975 | MANAGER   | NULL |
+| SCOTT  | 3000 | ANALYST   | NULL |
+| FORD   | 3000 | ANALYST   | NULL |
+| KING   | 5000 | PRESIDENT | NULL |
++--------+------+-----------+------+
+14 rows in set (0.00 sec)
+
+=================================添加辅助列=================
+
+mysql> select ename,sal,job,comm,
+    -> case when job='salesman' then comm
+    -> else sal
+    -> end as ordered
+    -> from emp
+    -> order by 5;
++--------+------+-----------+------+---------+
+| ename  | sal  | job       | comm | ordered |
++--------+------+-----------+------+---------+
+| TURNER | 1500 | SALESMAN  |    0 |       0 |
+| ALLEN  | 1600 | SALESMAN  |  300 |     300 |
+| WARD   | 1250 | SALESMAN  |  500 |     500 |
+| SMITH  |  800 | CLERK     | NULL |     800 |
+| JAMES  |  950 | CLERK     | NULL |     950 |
+| ADAMS  | 1100 | CLERK     | NULL |    1100 |
+| MILLER | 1300 | CLERK     | NULL |    1300 |
+| MARTIN | 1250 | SALESMAN  | 1400 |    1400 |
+| CLARK  | 2450 | MANAGER   | NULL |    2450 |
+| BLAKE  | 2850 | MANAGER   | NULL |    2850 |
+| JONES  | 2975 | MANAGER   | NULL |    2975 |
+| SCOTT  | 3000 | ANALYST   | NULL |    3000 |
+| FORD   | 3000 | ANALYST   | NULL |    3000 |
+| KING   | 5000 | PRESIDENT | NULL |    5000 |
++--------+------+-----------+------+---------+
+14 rows in set (0.00 sec)

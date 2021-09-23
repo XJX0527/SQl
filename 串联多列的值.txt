@@ -1,0 +1,14 @@
+mysql> select concat
+    -> (ename, ' WORKS as A ',job) as msg  #''里面是两个值之间的内容
+    -> from emp
+    -> where deptno=10;
+
++---------------------------+
+| msg                       |
++---------------------------+
+| CLARK WORKS as A MANAGER  |
+| KING WORKS as A PRESIDENT |
+| MILLER WORKS as A CLERK   |
++---------------------------+
+3 rows in set (0.00 sec)
+
