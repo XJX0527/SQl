@@ -1,0 +1,37 @@
+mysql> #从多个表中返回缺失值---合并两个表的外连接查询的结果集
+=============================联合两个集合=================
+mysql> select d.deptno,d.dname,e.ename
+    -> from dept d left outer join emp e
+    -> on(d.deptno=e.deptno)
+    -> union
+    -> select d.deptno,d.dname,e.ename
+    -> from emp e left outer join dept d
+    -> on(d.deptno=e.deptno);
++--------+------------+--------+
+| deptno | dname      | ename  |
++--------+------------+--------+
+|     20 | RESEARCH   | SMITH  |
+|     30 | SALES      | ALLEN  |
+|     30 | SALES      | WARD   |
+|     20 | RESEARCH   | JONES  |
+|     30 | SALES      | MARTIN |
+|     30 | SALES      | BLAKE  |
+|     10 | ACCOUNTING | CLARK  |
+|     20 | RESEARCH   | SCOTT  |
+|     10 | ACCOUNTING | KING   |
+|     30 | SALES      | TURNER |
+|     20 | RESEARCH   | ADAMS  |
+|     30 | SALES      | JAMES  |
+|     20 | RESEARCH   | FORD   |
+|     10 | ACCOUNTING | MILLER |
+|     40 | OPERATIONS | NULL   |
++--------+------------+--------+
+15 rows in set (0.00 sec)
+======
+select d.deptno,d.dname,e.ename
+from dept d left outer join emp e
+on(d.deptno=e.deptno)
+union 
+select d.deptno,d.dname,e.ename
+from emp e left outer join dept d
+on(d.deptno=e.deptno);

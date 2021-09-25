@@ -1,0 +1,151 @@
+#插入数据
+insert into dept (dept,dname,loc)
+values(1,'A','B'),
+(2,'C','D');
+
+insert into dept 
+values (3,'E','W');
+
+#插入默认值---default 
+create table D (id integer default 0)       #默认id为0
+insert into values(default)
+insert into id values(default)
+
+create table D (id integer defualt 0,foo varchar(10))
+insert into D(foo) values('BOR')
+
+#用NULL覆盖默认值
+create table D (id integer defualt 0,foo varchar(10))
+insert into D(id,foo) values(null,'BOR')
+
+create table D (id integer,foo varchar(10))
+insert into D(id,foo) values(null,'BOR')   #id的值为NULL
+
+#复制一个表到另一个表---insert into + select
+insert into dept_east (deptno,dname,loc)
+select deptno,dname,loc
+from emp
+where loc in('NEW YORK','BOSTON');
+
+
+#复制表定义---create + select + where 1=0
+cretae table dept_2
+as 
+select *from dept
+whete 1=0;
+
+#禁止插入特定列---有些列不允许修改（视图）
+create view new_emps 
+as select empno,ename,job  #只允许修改emp表中的这三列
+from emp;
+
+insert into new_emps
+(empno ename,job)
+values(1,'A','B');
+
+#更新记录-----update...set
+update emp
+set sal=sal*1.1
+where deptno=10;
+
+select deptno,ename,sal as orig_sal,sal*0.1 as amt_to_add,sal*1.1 as new_sal
+from emp
+where deptno=20
+order by 1,5;      #升序输出前五列
+
+#当相关行存在时更新记录
+select empno,ename
+from emp_bonus;
+
+update emp
+set sal=sal*1.2
+where empno in(select empno from emp_bonus);
+
+update emp
+set sal=sal*1.3
+where exists (
+select null 
+from emp_bonus
+where emp.empno=emp_bonus.empno);
+
+#使用另一个表的更新记录
+select * from new_sal;
+select deptno,ename,sal,comm
+from emp
+order by deptno;
+用new_sal中的数据去更新emp表中的数据
+update emp e 
+set(e.sal,e.comm)
+=
+(select ns.sal,ns.sal/2
+from new_sal ns
+where ns.deptno=e.deptno)
+where exists
+(select null
+from new_sal ns
+where ns.deptno=e.deptno);
+
+#删除全表
+delete from emp;
+
+#删除指定记录
+delete from emp where deptno=10;
+
+#删除单行记录---按主键索引
+delete from emp where empno=7782
+
+#删除重复记录---主键id不同，姓名相同，只保留一个
+delete from dupes
+where id not in
+(select min(id)
+from dupes
+group by name);
+
+select name,min(id)
+from dupes
+group by name;
+
+
+#删除违反参照完整性的记录
+delete from emp
+where not exists
+(select * from dept
+where dept.deptno=emp.deptno)
+
+delete fro emp
+where deptno not in
+(select deptno 
+from dept);
+
+#删除被其它表参照的记录
+select deptno
+from dept
+group by deptno
+having count(*)>3;
+
+delete from emp
+where deptno in
+(select deptno
+from dept_accidents
+group by deptno
+having count(*)>3);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

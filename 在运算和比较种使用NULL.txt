@@ -1,0 +1,58 @@
+#对空值赋值
+====================coalesce===============
+mysql> select ename,comm
+    -> from emp
+    -> where coalesce(comm,0)
+    -> <
+    -> (select comm from emp
+    -> where ename='WARD');
++--------+------+
+| ename  | comm |
++--------+------+
+| SMITH  | NULL |
+| ALLEN  |  300 |
+| JONES  | NULL |
+| BLAKE  | NULL |
+| CLARK  | NULL |
+| SCOTT  | NULL |
+| KING   | NULL |
+| TURNER |    0 |
+| ADAMS  | NULL |
+| JAMES  | NULL |
+| FORD   | NULL |
+| MILLER | NULL |
++--------+------+
+12 rows in set (0.00 sec)
+======================本质================
+mysql> select ename,comm,coalesce(comm,0)
+    -> from emp
+    -> where coalesce(comm,0)
+    -> <
+    -> (select comm
+    -> from emp
+    -> where ename='WARD');
++--------+------+------------------+
+| ename  | comm | coalesce(comm,0) |
++--------+------+------------------+
+| SMITH  | NULL |                0 |
+| ALLEN  |  300 |              300 |
+| JONES  | NULL |                0 |
+| BLAKE  | NULL |                0 |
+| CLARK  | NULL |                0 |
+| SCOTT  | NULL |                0 |
+| KING   | NULL |                0 |
+| TURNER |    0 |                0 |
+| ADAMS  | NULL |                0 |
+| JAMES  | NULL |                0 |
+| FORD   | NULL |                0 |
+| MILLER | NULL |                0 |
++--------+------+------------------+
+12 rows in set (0.00 sec)
+
+select ename,comm,coalesce(comm,0)
+from emp
+where coalesce(comm,0)
+<
+(select comm
+from emp
+where ename='WARD');
