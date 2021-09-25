@@ -1,0 +1,35 @@
+mysql> #从一个表检索到另一个表---连接（outer join...on）
+mysql> select d.*
+    -> from dept d left outer join emp e
+    -> on(d.deptno=e.deptno)
+    -> where e.deptno is null;
++--------+------------+--------+
+| DEPTNO | DNAME      | LOC    |
++--------+------------+--------+
+|     40 | OPERATIONS | BOSTON |
++--------+------------+--------+
+1 row in set (0.00 sec)
+
+mysql>  select e.ename as emp_deptno,d.*
+    -> from dept d left join emp e
+    -> on(d.deptno=e.deptno);
++------------+--------+------------+----------+
+| emp_deptno | DEPTNO | DNAME      | LOC      |
++------------+--------+------------+----------+
+| SMITH      |     20 | RESEARCH   | DALLAS   |
+| ALLEN      |     30 | SALES      | CHICAGO  |
+| WARD       |     30 | SALES      | CHICAGO  |
+| JONES      |     20 | RESEARCH   | DALLAS   |
+| MARTIN     |     30 | SALES      | CHICAGO  |
+| BLAKE      |     30 | SALES      | CHICAGO  |
+| CLARK      |     10 | ACCOUNTING | NEW YORK |
+| SCOTT      |     20 | RESEARCH   | DALLAS   |
+| KING       |     10 | ACCOUNTING | NEW YORK |
+| TURNER     |     30 | SALES      | CHICAGO  |
+| ADAMS      |     20 | RESEARCH   | DALLAS   |
+| JAMES      |     30 | SALES      | CHICAGO  |
+| FORD       |     20 | RESEARCH   | DALLAS   |
+| MILLER     |     10 | ACCOUNTING | NEW YORK |
+| NULL       |     40 | OPERATIONS | BOSTON   |
++------------+--------+------------+----------+
+15 rows in set (0.00 sec)

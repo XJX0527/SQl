@@ -1,0 +1,36 @@
+mysql> #查找只存在于一个表中的数据
+mysql> select deptno
+    -> from dept
+    -> where deptno not in(select deptno from emp);
++--------+
+| deptno |
++--------+
+|     40 |
++--------+
+1 row in set (0.01 sec)
+=================================
+mysql> select d.deptno
+    -> from dept d
+    -> where not exists(select null
+    -> from emp e
+    -> where d.deptno=e.deptno);
++--------+
+| deptno |
++--------+
+|     40 |
++--------+
+1 row in set (0.00 sec)
+============================
+mysql> select deptno
+    -> from dept
+    -> where deptno in(10,50,null);
++--------+
+| deptno |
++--------+
+|     10 |
++--------+
+1 row in set (0.00 sec)
+
+
+
+

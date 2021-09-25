@@ -1,0 +1,26 @@
+mysql> #外连接---join ..on 和 left join ..on相结合
+mysql> select e.ename,d.loc,eb.received
+    -> from emp e join dept d
+    -> on(e.deptno=d.deptno)
+    -> left join emp_bonus eb
+    -> on(e.empno=eb.empno)
+    -> order by 2;
++--------+----------+-------------+
+| ename  | loc      | received    |
++--------+----------+-------------+
+| ALLEN  | CHICAGO  | NULL        |
+| WARD   | CHICAGO  | NULL        |
+| TURNER | CHICAGO  | NULL        |
+| MARTIN | CHICAGO  | NULL        |
+| JAMES  | CHICAGO  | 14-MAR-2005 |
+| BLAKE  | CHICAGO  | NULL        |
+| JONES  | DALLAS   | NULL        |
+| SMITH  | DALLAS   | 14-MAR-2005 |
+| ADAMS  | DALLAS   | NULL        |
+| FORD   | DALLAS   | NULL        |
+| SCOTT  | DALLAS   | 14-MAR-2005 |
+| CLARK  | NEW YORK | NULL        |
+| KING   | NEW YORK | NULL        |
+| MILLER | NEW YORK | NULL        |
++--------+----------+-------------+
+14 rows in set (0.01 sec)

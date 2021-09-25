@@ -1,0 +1,350 @@
+mysql> #确定两个表是否有相同的数据---关联子查询
+mysql> #1.找出存在于emp表而不存在于视图V的行；
+mysql> #2.将存在于视图V而不存在于emp表的行合并（union all）
+
+mysql> create view V
+    -> as
+    -> select * from emp
+    -> where deptno!=10
+    -> union all
+    -> select * from emp
+    -> where ename="WARD";
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from V;
++-------+--------+----------+------+------------+------+------+--------+
+| EMPNO | ENAME  | JOB      | MGR  | HIREDATE   | SAL  | COMM | DEPTNO |
++-------+--------+----------+------+------------+------+------+--------+
+|  7369 | SMITH  | CLERK    | 7902 | 1980-12-17 |  800 | NULL |     20 |
+|  7499 | ALLEN  | SALESMAN | 7698 | 1981-02-20 | 1600 |  300 |     30 |
+|  7521 | WARD   | SALESMAN | 7698 | 1981-02-22 | 1250 |  500 |     30 |
+|  7566 | JONES  | MANAGER  | 7839 | 1981-04-02 | 2975 | NULL |     20 |
+|  7654 | MARTIN | SALESMAN | 7698 | 1981-09-28 | 1250 | 1400 |     30 |
+|  7698 | BLAKE  | MANAGER  | 7839 | 1981-05-01 | 2850 | NULL |     30 |
+|  7788 | SCOTT  | ANALYST  | 7566 | 1982-12-09 | 3000 | NULL |     20 |
+|  7844 | TURNER | SALESMAN | 7698 | 1981-09-08 | 1500 |    0 |     30 |
+|  7876 | ADAMS  | CLERK    | 7788 | 1983-01-12 | 1100 | NULL |     20 |
+|  7900 | JAMES  | CLERK    | 7698 | 1981-12-03 |  950 | NULL |     30 |
+|  7902 | FORD   | ANALYST  | 7566 | 1981-12-03 | 3000 | NULL |     20 |
+|  7521 | WARD   | SALESMAN | 7698 | 1981-02-22 | 1250 |  500 |     30 |
++-------+--------+----------+------+------------+------+------+--------+
+12 rows in set (0.01 sec)
+=======================================一步到位===========================
+mysql> #1.找出存在于emp表而不存在于视图V的行；
+mysql> #2.将存在于视图V而不存在于emp表的行合并（union all）
+mysql> select * from (
+    -> select e.empno,e.ename,e.job,e.mgr,e.hiredate,e.sal,e.comm,e.deptno,count(*) as cnt
+    -> from emp e
+    -> group by empno,ename,job,mgr,hiredate,sal,comm,deptno) e
+    -> where not exists(
+    -> select null from(
+    -> select v.empno,v.ename,v.job,v.mgr,v.hiredate,v.sal,v.comm,v.deptno,count(*) as cnt
+    -> from v
+    -> group by empno,ename,job,mgr,hiredate,sal,comm,deptno) v
+    -> where v.empno=e.empno
+    -> and v.ename=e.ename
+    -> and v.job=e.job
+    -> and v.mgr=e.mgr
+    -> and v.hiredate=e.hiredate
+    -> and v.comm=e.comm
+    -> and v.deptno=e.deptno
+    -> and v.cnt=e.cnt
+    -> and coalesce(v.comm,0)=coalesce(e.comm,0)
+    -> )
+    -> union all
+    -> select * from(
+    -> select v.empno,v.ename,v.job,v.mgr,v.hiredate,v.sal,v.comm,v.deptno,count(*) as cnt
+    -> from v
+    -> group by empno,ename,job,mgr,hiredate,sal,comm,deptno) v
+    -> where not exists(
+    -> select null from(
+    -> select e.empno,e.ename,e.job,e.mgr,e.hiredate,e.sal,e.comm,e.deptno,count(*) as cnt
+    -> from emp e
+    -> group by empno,ename,job,mgr,hiredate,sal,comm,deptno) e
+    -> where v.empno=e.empno
+    -> and v.ename=e.ename
+    -> and v.job=e.job
+    -> and v.mgr=e.mgr
+    -> and v.hiredate=e.hiredate
+    -> and v.comm=e.comm
+    -> and v.deptno=e.deptno
+    -> and v.cnt=e.cnt
+    -> and coalesce(v.comm,0)=coalesce(e.comm,0)
+    -> );
++-------+--------+-----------+------+------------+------+------+--------+-----+
+| empno | ename  | job       | mgr  | hiredate   | sal  | comm | deptno | cnt |
++-------+--------+-----------+------+------------+------+------+--------+-----+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800 | NULL |     20 |   1 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250 |  500 |     30 |   1 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975 | NULL |     20 |   1 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850 | NULL |     30 |   1 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2450 | NULL |     10 |   1 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 | 3000 | NULL |     20 |   1 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000 | NULL |     10 |   1 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 | 1100 | NULL |     20 |   1 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950 | NULL |     30 |   1 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000 | NULL |     20 |   1 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300 | NULL |     10 |   1 |
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800 | NULL |     20 |   1 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250 |  500 |     30 |   2 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975 | NULL |     20 |   1 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850 | NULL |     30 |   1 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 | 3000 | NULL |     20 |   1 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 | 1100 | NULL |     20 |   1 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950 | NULL |     30 |   1 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000 | NULL |     20 |   1 |
++-------+--------+-----------+------+------------+------+------+--------+-----+
+19 rows in set (0.01 sec)
+===================
+select * from (
+select e.empno,e.ename,e.job,e.mgr,e.hiredate,e.sal,e.comm,e.deptno,count(*) as cnt
+from emp e
+group by empno,ename,job,mgr,hiredate,sal,comm,deptno) e
+where not exists(
+select null from(
+select v.empno,v.ename,v.job,v.mgr,v.hiredate,v.sal,v.comm,v.deptno,count(*) as cnt
+from v
+group by empno,ename,job,mgr,hiredate,sal,comm,deptno) v
+where v.empno=e.empno
+and v.ename=e.ename
+and v.job=e.job
+and v.mgr=e.mgr
+and v.hiredate=e.hiredate
+and v.comm=e.comm
+and v.deptno=e.deptno
+and v.cnt=e.cnt
+and coalesce(v.comm,0)=coalesce(e.comm,0)
+)
+union all
+select * from(
+select v.empno,v.ename,v.job,v.mgr,v.hiredate,v.sal,v.comm,v.deptno,count(*) as cnt
+from v
+group by empno,ename,job,mgr,hiredate,sal,comm,deptno) v
+where not exists(
+select null from(
+select e.empno,e.ename,e.job,e.mgr,e.hiredate,e.sal,e.comm,e.deptno,count(*) as cnt
+from emp e
+group by empno,ename,job,mgr,hiredate,sal,comm,deptno) e
+where v.empno=e.empno
+and v.ename=e.ename
+and v.job=e.job
+and v.mgr=e.mgr
+and v.hiredate=e.hiredate
+and v.comm=e.comm
+and v.deptno=e.deptno
+and v.cnt=e.cnt
+and coalesce(v.comm,0)=coalesce(e.comm,0)
+);
+=============================两步操作：先找出存在于V中，不存在于E中的表，后找出存在于E中不存在于V中的表，后对两表进行（union all）合并即可======================
+mysql> select * from (
+    -> select e.empno,e.ename,e.job,e.mgr,e.hiredate,e.sal,e.comm,e.deptno,count(*) as cnt
+    -> from emp e
+    -> group by empno,ename,job,mgr,hiredate,sal,comm,deptno) e
+    -> where not exists(
+    -> select null from(
+    -> select v.empno,v.ename,v.job,v.mgr,v.hiredate,v.sal,v.comm,v.deptno,count(*) as cnt
+    -> from v
+    -> group by empno,ename,job,mgr,hiredate,sal,comm,deptno) v
+    -> where v.empno=e.empno
+    -> and v.ename=e.ename
+    -> and v.job=e.job
+    -> and v.mgr=e.mgr
+    -> and v.hiredate=e.hiredate
+    -> and v.comm=e.comm
+    -> and v.deptno=e.deptno
+    -> and v.cnt=e.cnt
+    -> and coalesce(v.comm,0)=coalesce(e.comm,0)
+    -> );
++-------+--------+-----------+------+------------+------+------+--------+-----+
+| empno | ename  | job       | mgr  | hiredate   | sal  | comm | deptno | cnt |
++-------+--------+-----------+------+------------+------+------+--------+-----+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800 | NULL |     20 |   1 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250 |  500 |     30 |   1 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975 | NULL |     20 |   1 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850 | NULL |     30 |   1 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2450 | NULL |     10 |   1 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 | 3000 | NULL |     20 |   1 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000 | NULL |     10 |   1 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 | 1100 | NULL |     20 |   1 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950 | NULL |     30 |   1 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000 | NULL |     20 |   1 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300 | NULL |     10 |   1 |
++-------+--------+-----------+------+------------+------+------+--------+-----+
+11 rows in set (0.00 sec)
+
+mysql> select * from (
+    -> select v.empno,v.ename,v.job,v.mgr,v.hiredate,v.sal,v.comm,v.deptno,count(*) as cnt
+    -> from v
+    -> group by empno,ename,job,mgr,hiredate,sal,comm,deptno) v
+    -> where not exists(
+    -> select null from(
+    -> select e.empno,e.ename,e.job,e.mgr,e.hiredate,e.sal,e.comm,e.deptno,count(*) as cnt
+    -> from emp e
+    -> group by empno,ename,job,mgr,hiredate,sal,comm,deptno) e
+    -> where v.empno=e.empno
+    -> and v.ename=e.ename
+    -> and v.job=e.job
+    -> and v.mgr=e.mgr
+    -> and v.hiredate=e.hiredate
+    -> and v.comm=e.comm
+    -> and v.deptno=e.deptno
+    -> and v.cnt=e.cnt
+    -> and coalesce(v.comm,0)=coalesce(e.comm,0)
+    -> );
++-------+-------+----------+------+------------+------+------+--------+-----+
+| empno | ename | job      | mgr  | hiredate   | sal  | comm | deptno | cnt |
++-------+-------+----------+------+------------+------+------+--------+-----+
+|  7369 | SMITH | CLERK    | 7902 | 1980-12-17 |  800 | NULL |     20 |   1 |
+|  7521 | WARD  | SALESMAN | 7698 | 1981-02-22 | 1250 |  500 |     30 |   2 |
+|  7566 | JONES | MANAGER  | 7839 | 1981-04-02 | 2975 | NULL |     20 |   1 |
+|  7698 | BLAKE | MANAGER  | 7839 | 1981-05-01 | 2850 | NULL |     30 |   1 |
+|  7788 | SCOTT | ANALYST  | 7566 | 1982-12-09 | 3000 | NULL |     20 |   1 |
+|  7876 | ADAMS | CLERK    | 7788 | 1983-01-12 | 1100 | NULL |     20 |   1 |
+|  7900 | JAMES | CLERK    | 7698 | 1981-12-03 |  950 | NULL |     30 |   1 |
+|  7902 | FORD  | ANALYST  | 7566 | 1981-12-03 | 3000 | NULL |     20 |   1 |
++-------+-------+----------+------+------------+------+------+--------+-----+
+8 rows in set (0.00 sec)
+
+mysql> select * from (
+    -> select v.empno,v.ename,v.job,v.mgr,v.hiredate,v.sal,v.comm,v.deptno,count(*) as cnt
+    -> from v
+    -> group by empno,ename,job,mgr,hiredate,sal,comm,deptno) v
+    -> where not exists(
+    -> select null from(
+    -> select e.empno,e.ename,e.job,e.mgr,e.hiredate,e.sal,e.comm,e.deptno,count(*) as cnt
+    -> from emp e
+    -> group by empno,ename,job,mgr,hiredate,sal,comm,deptno) e
+    -> where v.empno=e.empno
+    -> and v.ename=e.ename
+    -> and v.job=e.job
+    -> and v.mgr=e.mgr
+    -> and v.hiredate=e.hiredate
+    -> and v.comm=e.comm
+    -> and v.deptno=e.deptno
+    -> and v.cnt=e.cnt
+    -> and coalesce(v.comm,0)=coalesce(e.comm,0)
+    -> )
+    -> union all
+    -> select * from (
+    -> select e.empno,e.ename,e.job,e.mgr,e.hiredate,e.sal,e.comm,e.deptno,count(*) as cnt
+    -> from emp e
+    -> group by empno,ename,job,mgr,hiredate,sal,comm,deptno) e
+    -> where not exists(
+    -> select null from(
+    -> select v.empno,v.ename,v.job,v.mgr,v.hiredate,v.sal,v.comm,v.deptno,count(*) as cnt
+    -> from v
+    -> group by empno,ename,job,mgr,hiredate,sal,comm,deptno) v
+    -> where v.empno=e.empno
+    -> and v.ename=e.ename
+    -> and v.job=e.job
+    -> and v.mgr=e.mgr
+    -> and v.hiredate=e.hiredate
+    -> and v.comm=e.comm
+    -> and v.deptno=e.deptno
+    -> and v.cnt=e.cnt
+    -> and coalesce(v.comm,0)=coalesce(e.comm,0)
+    -> );
++-------+--------+-----------+------+------------+------+------+--------+-----+
+| empno | ename  | job       | mgr  | hiredate   | sal  | comm | deptno | cnt |
++-------+--------+-----------+------+------------+------+------+--------+-----+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800 | NULL |     20 |   1 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250 |  500 |     30 |   2 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975 | NULL |     20 |   1 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850 | NULL |     30 |   1 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 | 3000 | NULL |     20 |   1 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 | 1100 | NULL |     20 |   1 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950 | NULL |     30 |   1 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000 | NULL |     20 |   1 |
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800 | NULL |     20 |   1 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250 |  500 |     30 |   1 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975 | NULL |     20 |   1 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850 | NULL |     30 |   1 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2450 | NULL |     10 |   1 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 | 3000 | NULL |     20 |   1 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000 | NULL |     10 |   1 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 | 1100 | NULL |     20 |   1 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950 | NULL |     30 |   1 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000 | NULL |     20 |   1 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300 | NULL |     10 |   1 |
++-------+--------+-----------+------+------------+------+------+--------+-----+
+19 rows in set (0.00 sec)
+==================
+select * from (
+select e.empno,e.ename,e.job,e.mgr,e.hiredate,e.sal,e.comm,e.deptno,count(*) as cnt
+from emp e
+group by empno,ename,job,mgr,hiredate,sal,comm,deptno) e
+where not exists(
+select null from(
+select v.empno,v.ename,v.job,v.mgr,v.hiredate,v.sal,v.comm,v.deptno,count(*) as cnt
+from v
+group by empno,ename,job,mgr,hiredate,sal,comm,deptno) v
+where v.empno=e.empno
+and v.ename=e.ename
+and v.job=e.job
+and v.mgr=e.mgr
+and v.hiredate=e.hiredate
+and v.comm=e.comm
+and v.deptno=e.deptno
+and v.cnt=e.cnt
+and coalesce(v.comm,0)=coalesce(e.comm,0)
+);
+==================
+select * from (
+select v.empno,v.ename,v.job,v.mgr,v.hiredate,v.sal,v.comm,v.deptno,count(*) as cnt
+from v
+group by empno,ename,job,mgr,hiredate,sal,comm,deptno) v
+where not exists(
+select null from(
+select e.empno,e.ename,e.job,e.mgr,e.hiredate,e.sal,e.comm,e.deptno,count(*) as cnt
+from emp e
+group by empno,ename,job,mgr,hiredate,sal,comm,deptno) e
+where v.empno=e.empno
+and v.ename=e.ename
+and v.job=e.job
+and v.mgr=e.mgr
+and v.hiredate=e.hiredate
+and v.comm=e.comm
+and v.deptno=e.deptno
+and v.cnt=e.cnt
+and coalesce(v.comm,0)=coalesce(e.comm,0)
+);
+=========
+select * from (
+select v.empno,v.ename,v.job,v.mgr,v.hiredate,v.sal,v.comm,v.deptno,count(*) as cnt
+from v
+group by empno,ename,job,mgr,hiredate,sal,comm,deptno) v
+where not exists(
+select null from(
+select e.empno,e.ename,e.job,e.mgr,e.hiredate,e.sal,e.comm,e.deptno,count(*) as cnt
+from emp e
+group by empno,ename,job,mgr,hiredate,sal,comm,deptno) e
+where v.empno=e.empno
+and v.ename=e.ename
+and v.job=e.job
+and v.mgr=e.mgr
+and v.hiredate=e.hiredate
+and v.comm=e.comm
+and v.deptno=e.deptno
+and v.cnt=e.cnt
+and coalesce(v.comm,0)=coalesce(e.comm,0)
+)
+union all
+select * from (
+select e.empno,e.ename,e.job,e.mgr,e.hiredate,e.sal,e.comm,e.deptno,count(*) as cnt
+from emp e
+group by empno,ename,job,mgr,hiredate,sal,comm,deptno) e
+where not exists(
+select null from(
+select v.empno,v.ename,v.job,v.mgr,v.hiredate,v.sal,v.comm,v.deptno,count(*) as cnt
+from v
+group by empno,ename,job,mgr,hiredate,sal,comm,deptno) v
+where v.empno=e.empno
+and v.ename=e.ename
+and v.job=e.job
+and v.mgr=e.mgr
+and v.hiredate=e.hiredate
+and v.comm=e.comm
+and v.deptno=e.deptno
+and v.cnt=e.cnt
+and coalesce(v.comm,0)=coalesce(e.comm,0)
+);

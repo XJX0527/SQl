@@ -1,0 +1,43 @@
+mysql> #表的连接（叠加）---union all（连接的表格的列数要相同），不过滤重复项
+mysql> #union会过滤重复项
+mysql> select ename as ename_and_dname,deptno
+    -> from emp
+    -> where deptno=10
+    -> union all
+    -> select dname,deptno
+    -> from dept;
++-----------------+--------+
+| ename_and_dname | deptno |
++-----------------+--------+
+| CLARK           |     10 |
+| KING            |     10 |
+| MILLER          |     10 |
+| ACCOUNTING      |     10 |
+| RESEARCH        |     20 |
+| SALES           |     30 |
+| OPERATIONS      |     40 |
++-----------------+--------+
+7 rows in set (0.00 sec)
+mysql> select ename,deptno
+    -> from emp
+    -> where deptno=10;
++--------+--------+
+| ename  | deptno |
++--------+--------+
+| CLARK  |     10 |
+| KING   |     10 |
+| MILLER |     10 |
++--------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select dname,deptno
+    -> from dept;
++------------+--------+
+| dname      | deptno |
++------------+--------+
+| ACCOUNTING |     10 |
+| RESEARCH   |     20 |
+| SALES      |     30 |
+| OPERATIONS |     40 |
++------------+--------+
+4 rows in set (0.00 sec)

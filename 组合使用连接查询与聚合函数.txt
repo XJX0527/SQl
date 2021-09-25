@@ -1,0 +1,41 @@
+#注意本题在计算工资时，进行表格笛卡尔连接后聚合计算时，会造成工资重复计算
+#如何解决？
+#1.调用聚合函数前使用distinct
+#2.在连接表格前，先聚合计算
+#我们发现1和2计算结果不同，是因为1中计算结果不是所有deptno=20的sal总和，只包含了emp_bonus中的数据
+#下一节中的外连接可以解决这个问题
+mysql> select deptno,sum(distinct sal) as total_sal,sum(bonus) as total_bonus
+    -> from (
+    -> select e.empno,e.ename,e.sal,e.deptno,e.sal*case when eb.type=1 then .1
+    -> when eb.type=2 then .2
+    -> else .3
+    -> end as bonus
+    -> from emp e,emp_bonus eb
+    -> where e.empno=eb.empno
+    -> and e.deptno=20) x
+    -> group by deptno;
++--------+-----------+-------------+
+| deptno | total_sal | total_bonus |
++--------+-----------+-------------+
+|     20 |      3800 |       980.0 |
++--------+-----------+-------------+
+1 row in set (0.01 sec)
+==============================================
+mysql> select d.deptno,d.total_sal,sum(e.sal*case when eb.type=1 then .1
+    -> when eb.type=2 then .2
+    -> else .3
+    -> end) as bonus
+    -> from emp e,emp_bonus eb,
+    -> (select deptno,sum(sal) as total_sal
+    -> from emp
+    -> where deptno=20
+    -> group by deptno) d
+    -> where e.deptno=d.deptno
+    -> and e.empno=eb.empno
+    -> group by d.deptno,d.total_sal;
++--------+-----------+-------+
+| deptno | total_sal | bonus |
++--------+-----------+-------+
+|     20 |     10875 | 980.0 |
++--------+-----------+-------+
+1 row in set (0.00 sec)

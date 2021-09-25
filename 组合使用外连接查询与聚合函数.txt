@@ -1,0 +1,69 @@
+mysql> #组合使用外连接查询与聚合函数---外连接 or 窗口函数(sum over)
+==============外连接============
+mysql> select deptno,
+    -> sum(distinct sal) as tatoal_sal,
+    -> sum(bonus) as total_bonus
+    -> from(
+    -> select e.empno,e.ename,e.sal,e.deptno,e.sal*case when eb.type is null then 0
+    -> when eb.type=1 then .1
+    -> when eb.type=2 then .2
+    -> else .3
+    -> end as bonus
+    -> from emp e left outer join emp_bonus eb
+    -> on(e.empno=eb.empno)
+    -> where e.deptno=20) x
+    -> group by deptno;
++--------+------------+-------------+
+| deptno | tatoal_sal | total_bonus |
++--------+------------+-------------+
+|     20 |       7875 |       980.0 |
++--------+------------+-------------+
+1 row in set (0.00 sec)
+
+select deptno,
+sum(distinct sal) as tatoal_sal,
+sum(bonus) as total_bonus
+from(
+select e.empno,e.ename,e.sal,e.deptno,e.sal*case when eb.type is null then 0
+when eb.type=1 then .1
+when eb.type=2 then .2
+else .3
+end as bonus
+from emp e left outer join emp_bonus eb
+on(e.empno=eb.empno)
+where e.deptno=20) x             #注意内嵌视图的别名问题
+group by deptno;
+====================窗口函数(sum over)================
+书上有点问题
+=======================另一种方法==================
+mysql> select d.deptno,d.total_sal,sum(e.sal*case when eb.type=1 then .1
+    -> when eb.type=2 then .2
+    -> else .3
+    -> end) as total_bonus
+    -> from emp e,emp_bonus eb,
+    -> (select deptno,sum(sal) as total_sal from emp
+    -> where deptno=20
+    -> group by deptno)d
+    -> where e.deptno=d.deptno
+    -> and e.empno=eb.empno
+    -> group by d.deptno,d.total_sal;
++--------+-----------+-------------+
+| deptno | total_sal | total_bonus |
++--------+-----------+-------------+
+|     20 |     10875 |       980.0 |
++--------+-----------+-------------+
+1 row in set (0.00 sec)
+select d.deptno,d.total_sal,sum(e.sal*case when eb.type=1 then .1
+when eb.type=2 then .2
+else .3
+end) as total_bonus
+from emp e,emp_bonus eb,
+(select deptno,sum(sal) as total_sal from emp
+where deptno=20
+group by deptno)d
+where e.deptno=d.deptno
+and e.empno=eb.empno
+group by d.deptno,d.total_sal;
+
+
+

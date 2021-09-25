@@ -1,0 +1,13 @@
+mysql> #识别并消除笛卡尔积----（n-1）法则
+mysql> select e.ename,d.loc
+    -> from emp e,dept d
+    -> where e.deptno=d.deptno
+    -> and e.deptno=10;
++--------+----------+
+| ename  | loc      |
++--------+----------+
+| CLARK  | NEW YORK |
+| KING   | NEW YORK |
+| MILLER | NEW YORK |
++--------+----------+
+3 rows in set (0.00 sec)
