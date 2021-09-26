@@ -1,0 +1,22 @@
+mysql> #解析IP地址---substring_index()函数
+
+mysql> select substring_index(substring_index(y.ip,'.',1),',',-1)a,
+    -> substring_index(substring_index(y.ip,'.',2),',',-1)b,
+    -> substring_index(substring_index(y.ip,'.',3),',',-1)c,
+    -> substring_index(substring_index(y.ip,'.',4),',',-1)d
+    -> from (select '92.111.0.2' as ip from t1)y;
++------+--------+----------+------------+
+| a    | b      | c        | d          |
++------+--------+----------+------------+
+| 92   | 92.111 | 92.111.0 | 92.111.0.2 |
++------+--------+----------+------------+
+1 row in set (0.00 sec)
+
+
+
+
+
+
+
+
+
