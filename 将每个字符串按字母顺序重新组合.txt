@@ -1,0 +1,109 @@
+mysql> #将每个字符串按字母顺序重新组合--group_concat()函数
+mysql> select ename,group_concat(c order by c separator '')           #按字母表顺序组合
+    -> from(
+    -> select ename,substr(a.ename,iter.pos,1)c
+    -> from emp a,
+    -> (select id pos from t10)iter
+    -> where iter.pos<=length(a.ename)
+    -> )x
+    -> group by ename; 
++--------+-----------------------------------------+
+| ename  | group_concat(c order by c separator '') |
++--------+-----------------------------------------+
+| ADAMS  | AADMS                                   |
+| ALLEN  | AELLN                                   |
+| BLAKE  | ABEKL                                   |
+| CLARK  | ACKLR                                   |
+| FORD   | DFOR                                    |
+| JAMES  | AEJMS                                   |
+| JONES  | EJNOS                                   |
+| KING   | GIKN                                    |
+| MARTIN | AIMNRT                                  |
+| MILLER | EILLMR                                  |
+| SCOTT  | COSTT                                   |
+| SMITH  | HIMST                                   |
+| TURNER | ENRRTU                                  |
+| WARD   | ADRW                                    |
++--------+-----------------------------------------+
+14 rows in set (0.00 sec)
+
+==========================================要排序的列中的所有的字母=======================
+mysql> select ename,substr(a.ename,iter.pos,1)c
+    -> from emp a,
+    -> (select id pos from t10)iter
+    -> where iter.pos<=length(a.ename);
++--------+------+
+| ename  | c    |
++--------+------+
+| SMITH  | S    |
+| SMITH  | M    |
+| SMITH  | I    |
+| SMITH  | T    |
+| SMITH  | H    |
+| ALLEN  | A    |
+| ALLEN  | L    |
+| ALLEN  | L    |
+| ALLEN  | E    |
+| ALLEN  | N    |
+| WARD   | W    |
+| WARD   | A    |
+| WARD   | R    |
+| WARD   | D    |
+| JONES  | J    |
+| JONES  | O    |
+| JONES  | N    |
+| JONES  | E    |
+| JONES  | S    |
+| MARTIN | M    |
+| MARTIN | A    |
+| MARTIN | R    |
+| MARTIN | T    |
+| MARTIN | I    |
+| MARTIN | N    |
+| BLAKE  | B    |
+| BLAKE  | L    |
+| BLAKE  | A    |
+| BLAKE  | K    |
+| BLAKE  | E    |
+| CLARK  | C    |
+| CLARK  | L    |
+| CLARK  | A    |
+| CLARK  | R    |
+| CLARK  | K    |
+| SCOTT  | S    |
+| SCOTT  | C    |
+| SCOTT  | O    |
+| SCOTT  | T    |
+| SCOTT  | T    |
+| KING   | K    |
+| KING   | I    |
+| KING   | N    |
+| KING   | G    |
+| TURNER | T    |
+| TURNER | U    |
+| TURNER | R    |
+| TURNER | N    |
+| TURNER | E    |
+| TURNER | R    |
+| ADAMS  | A    |
+| ADAMS  | D    |
+| ADAMS  | A    |
+| ADAMS  | M    |
+| ADAMS  | S    |
+| JAMES  | J    |
+| JAMES  | A    |
+| JAMES  | M    |
+| JAMES  | E    |
+| JAMES  | S    |
+| FORD   | F    |
+| FORD   | O    |
+| FORD   | R    |
+| FORD   | D    |
+| MILLER | M    |
+| MILLER | I    |
+| MILLER | L    |
+| MILLER | L    |
+| MILLER | E    |
+| MILLER | R    |
++--------+------+
+70 rows in set (0.00 sec)

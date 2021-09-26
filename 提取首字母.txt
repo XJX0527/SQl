@@ -1,0 +1,103 @@
+mysql> #提取首字母
+mysql> #concat，concat_ws，substring，substring_index
+mysql> #trim函数，去除字符串首尾的空格
+mysql> #连接字符串
+mysql> select case
+    -> when cnt=2 then
+    -> trim(
+    -> concat_ws('.',    #连接字符串
+    -> substr(substring_index(name,' ',1),1,1),
+    -> substr(name,length(substring_index(name,' ',1))+2,1),
+    -> ''))
+    -> else
+    -> trim(
+    -> concat_ws('.',
+    -> substr(substring_index(name,' ',1),1,1),
+    -> ''))
+    -> end as initials
+    ->
+    -> from(
+    -> select name,(length(name)-length(replace(name,' ',''))+1)as cnt
+    -> from(
+    -> select replace('Stewie Griffin','.',' ') as name from t1)y
+    -> )x
+    -> ;
++----------+
+| initials |
++----------+
+| S.G.     |
++----------+
+1 row in set (0.00 sec)
+
+mysql>
+============================
+select case
+when cnt=2 then
+trim(    
+concat_ws('.',   
+substr(substring_index(name,' ',1),1,1),
+substr(name,length(substring_index(name,' ',1))+2,1),
+''))
+else
+trim(
+concat_ws('.',
+substr(substring_index(name,' ',1),1,1),
+''))
+end as initials
+from(
+select name,(length(name)-length(replace(name,' ',''))+1)as cnt 
+from(
+select replace('Stewie Griffin','.',' ') as name from t1)y
+)x;
+
+
+========================该次用到的函数的举例说明============
+mysql> select substring_index('Stewie Griffin',' ',1);
++-----------------------------------------+
+| substring_index('Stewie Griffin',' ',1) |
++-----------------------------------------+
+| Stewie                                  |
++-----------------------------------------+
+1 row in set (0.00 sec)
+
+****************************************************************************************
+mysql> select substr(substring_index('Stewie Griffin',' ',1),1,1);
++-----------------------------------------------------+
+| substr(substring_index('Stewie Griffin',' ',1),1,1) |
++-----------------------------------------------------+
+| S                                                   |
++-----------------------------------------------------+
+1 row in set (0.00 sec)
+
+********************************************************************************************
+mysql> select substr('Stewie Griffin',length(substring_index('Stewie Griffin',' ',1))+2,1);
++------------------------------------------------------------------------------+
+| substr('Stewie Griffin',length(substring_index('Stewie Griffin',' ',1))+2,1) |
++------------------------------------------------------------------------------+
+| G                                                                            |
++------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+********************************************************************************************
+mysql> select concat_ws('.','S','G','');
++---------------------------+
+| concat_ws('.','S','G','') |
++---------------------------+
+| S.G.                      |
++---------------------------+
+1 row in set (0.00 sec)
+
+********************************************************************************************
+mysql> select substring_index('Stewie Griffin',' ',-1);
++------------------------------------------+
+| substring_index('Stewie Griffin',' ',-1) |
++------------------------------------------+
+| Griffin                                  |
++------------------------------------------+
+1 row in set (0.00 sec)
+****************************************************************************************
+select
+trim(
+concat_ws('.',   
+substr(substring_index('Stewie Griffin',' ',1),1,1),
+substr('Stewie Griffin',length(substring_index('Stewie Griffin',' ',1))+2,1),
+''));

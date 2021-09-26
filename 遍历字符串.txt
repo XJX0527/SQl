@@ -1,0 +1,40 @@
+mysql> #遍历字符串---利用笛卡尔积生成所需要的行数，后对值进行替换
+===第一步，笛卡尔积===
+mysql> select e.ename,iter.pos
+    -> from
+    ->  (select ename from emp where ename='KING')e,
+    -> (select id as pos from t10)iter
+    ->  where iter.pos<=length(e.ename);
++-------+------+
+| ename | pos  |
++-------+------+
+| KING  |    1 |
+| KING  |    2 |
+| KING  |    3 |
+| KING  |    4 |
++-------+------+
+4 rows in set (0.01 sec)
+substr(e.name,length(e.name)-iter.pos+1)b,
+===第二步，遍历====
+mysql> select e.ename,substr(e.ename,iter.pos) as c,
+    -> substr(e.ename,length(e.ename)-iter.pos+1)b
+    -> from
+    -> (select ename from emp where ename='KING')e,
+    -> (select id as pos from t10)iter
+    ->  where iter.pos<=length(e.ename);
++-------+------+------+
+| ename | c    | b    |
++-------+------+------+
+| KING  | KING | G    |
+| KING  | ING  | NG   |
+| KING  | NG   | ING  |
+| KING  | G    | KING |
++-------+------+------+
+4 rows in set (0.00 sec)
+
+select e.ename,substr(e.ename,iter.pos) as c,
+substr(e.ename,length(e.ename)-iter.pos+1)b
+from
+(select ename from emp where ename='KING')e,
+(select id as pos from t10)iter
+ where iter.pos<=length(e.ename);

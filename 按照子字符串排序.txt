@@ -1,0 +1,25 @@
+mysql> #按照子字符串排序---substr + length
+length(ename)-1：倒数第二个字符开始
+
+mysql> select ename
+    -> from emp
+    -> order by substr(ename,length(ename)-1);
++--------+
+| ename  |
++--------+
+| ALLEN  |
+| TURNER |
+| MILLER |
+| JONES  |
+| JAMES  |
+| MARTIN |
+| BLAKE  |
+| ADAMS  |
+| KING   |
+| WARD   |
+| FORD   |
+| CLARK  |
+| SMITH  |
+| SCOTT  |
++--------+
+14 rows in set (0.00 sec)

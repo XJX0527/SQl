@@ -1,0 +1,26 @@
+mysql> #嵌入引号--''
+mysql> select * from t1;
++------+
+| ID   |
++------+
+|    1 |
++------+
+1 row in set (0.01 sec)
+
+mysql> select 'g''day mate' qmarks from t1 union all
+    -> select '''' from t1;
++------------+
+| qmarks     |
++------------+
+| g'day mate |
+| '          |
++------------+
+2 rows in set (0.22 sec)
+
+mysql> select 'beavers''teeth' from t1;
++---------------+
+| beavers'teeth |
++---------------+
+| beavers'teeth |
++---------------+
+1 row in set (0.00 sec)

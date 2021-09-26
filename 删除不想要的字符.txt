@@ -1,0 +1,30 @@
+mysql> #删除不想要的字符---replace()
+mysql> select ename,
+    -> replace(
+    -> replace(
+    -> replace(
+    -> replace(
+    -> replace(ename,'A',''),'E',''),'I',''),'O',''),'U','')
+    -> as new_ename,
+    -> sal,
+    -> replace(sal,0,'') as new_sal
+    -> from emp;
++--------+-----------+------+---------+
+| ename  | new_ename | sal  | new_sal |
++--------+-----------+------+---------+
+| SMITH  | SMTH      |  800 | 8       |
+| ALLEN  | LLN       | 1600 | 16      |
+| WARD   | WRD       | 1250 | 125     |
+| JONES  | JNS       | 2975 | 2975    |
+| MARTIN | MRTN      | 1250 | 125     |
+| BLAKE  | BLK       | 2850 | 285     |
+| CLARK  | CLRK      | 2450 | 245     |
+| SCOTT  | SCTT      | 3000 | 3       |
+| KING   | KNG       | 5000 | 5       |
+| TURNER | TRNR      | 1500 | 15      |
+| ADAMS  | DMS       | 1100 | 11      |
+| JAMES  | JMS       |  950 | 95      |
+| FORD   | FRD       | 3000 | 3       |
+| MILLER | MLLR      | 1300 | 13      |
++--------+-----------+------+---------+
+14 rows in set (0.00 sec)

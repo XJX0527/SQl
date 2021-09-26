@@ -1,0 +1,15 @@
+mysql> #创建分隔列表---group_concat()函数：多行转化为一行
+
+mysql> select deptno,
+    ->  group_concat(ename order by empno separator ',')as emps
+    -> from emp
+    -> group by deptno;
++--------+--------------------------------------+
+| deptno | emps                                 |
++--------+--------------------------------------+
+|     10 | CLARK,KING,MILLER                    |
+|     20 | SMITH,JONES,SCOTT,ADAMS,FORD         |
+|     30 | ALLEN,WARD,MARTIN,BLAKE,TURNER,JAMES |
++--------+--------------------------------------+
+3 rows in set (0.00 sec)
+

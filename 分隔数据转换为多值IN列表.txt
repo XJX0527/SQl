@@ -1,0 +1,40 @@
+mysql> #分隔数据转换为多值IN列表
+mysql> select empno,ename,sal,deptno
+    -> from emp
+    -> where empno in
+    -> (
+    -> select substring_index(
+    -> substring_index(list.vals,',',iter.pos),',',-1)empno        #循环每次取数
+    -> from (select id pos from t10) as iter,
+    -> (select '7654,7698,7782,7788' as vals from t1)list
+    -> where iter.pos<=
+    -> (length(list.vals)-length(replace(list.vals,',','')))+1        #只取t10的前5行
+    -> );
++-------+--------+------+--------+
+| empno | ename  | sal  | deptno |
++-------+--------+------+--------+
+|  7654 | MARTIN | 1250 |     30 |
+|  7698 | BLAKE  | 2850 |     30 |
+|  7782 | CLARK  | 2450 |     10 |
+|  7788 | SCOTT  | 3000 |     20 |
++-------+--------+------+--------+
+4 rows in set (0.01 sec)
+
+=========================
+mysql> select '7654,7698,7782,7788' as vals from t1;
++---------------------+
+| vals                |
++---------------------+
+| 7654,7698,7782,7788 |
++---------------------+
+1 row in set (0.00 sec)
+
+
+mysql>
+mysql> select substring_index('7654,7698,7782,7788',',',1);
++----------------------------------------------+
+| substring_index('7654,7698,7782,7788',',',1) |
++----------------------------------------------+
+| 7654                                         |
++----------------------------------------------+
+1 row in set (0.00 sec)
