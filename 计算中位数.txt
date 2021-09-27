@@ -1,0 +1,31 @@
+mysql> #查询中位数---自连接 + singn函数
+mysql> #2975为中位数
+mysql> select e.sal,sum(case when e.sal=d.sal then 1 else 0 end)as cnt1,
+    -> abs(sum(sign(e.sal-d.sal))) as cnt2
+    -> from emp e,emp d
+    -> where e.deptno=d.deptno
+    -> and e.deptno=20
+    -> group by e.sal;
++------+------+------+
+| sal  | cnt1 | cnt2 |
++------+------+------+
+|  800 |    1 |    4 |
+| 1100 |    1 |    2 |
+| 2975 |    1 |    0 |
+| 3000 |    4 |    6 |
++------+------+------+
+4 rows in set (0.00 sec)
+select e.sal,sum(case when e.sal=d.sal then 1 else 0 end)as cnt1,   #计算e.sal=d.sal的次数
+abs(sum(sign(e.sal-d.sal))) as cnt2  #
+from emp e,emp d
+where e.deptno=d.deptno
+and e.deptno=20
+group by e.sal;
+
+singn函数，x为正数返回1，为负数返回-1，为0返回0
+
+
+
+
+
+

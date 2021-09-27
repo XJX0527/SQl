@@ -1,0 +1,32 @@
+mysql> #查找最大最小值---min，max
+mysql> select min(sal) min_sal,max(sal) max_sal
+    -> from emp;
++---------+---------+
+| min_sal | max_sal |
++---------+---------+
+|     800 |    5000 |
++---------+---------+
+1 row in set (0.01 sec)
+
+mysql>  select min(sal) min_sal,max(sal) max_sal
+    -> from emp
+    -> where deptno in(10,30)
+    -> order by 1;
++---------+---------+
+| min_sal | max_sal |
++---------+---------+
+|     950 |    5000 |
++---------+---------+
+1 row in set (0.00 sec)
+
+mysql> select min(sal) min_sal,max(sal) max_sal
+    -> from emp
+    -> group by deptno;
++---------+---------+
+| min_sal | max_sal |
++---------+---------+
+|    1300 |    5000 |
+|     800 |    3000 |
+|     950 |    2850 |
++---------+---------+
+3 rows in set (0.00 sec)

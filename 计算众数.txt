@@ -1,0 +1,16 @@
+mysql> #计算众数---子查询 + count
+mysql> select sal
+    -> from emp
+    -> where deptno=20
+    -> group by sal
+    -> having count(*)>=all(
+    -> select count(*)
+    -> from emp
+    -> where deptno=20
+    -> group by sal);
++------+
+| sal  |
++------+
+| 3000 |
++------+
+1 row in set (0.00 sec)

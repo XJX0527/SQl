@@ -1,0 +1,29 @@
+mysql> #修改累计值--case when
+create table AT(
+id smallint(6) not null default 0,
+amt smallint(6),
+trx char(6));
+
+insert into AT values(1,100,'PR'),(2,100,'PR'),(3,50,'PY'),(4,100,'PR'),(5,200,'PY'),(6,50,'PY');
+
+mysql> select * from AT;
++----+------+------+
+| id | amt  | trx  |
++----+------+------+
+|  1 |  100 | PR   |
+|  2 |  100 | PR   |
+|  3 |   50 | PY   |
+|  4 |  100 | PR   |
+|  5 |  200 | PY   |
+|  6 |   50 | PY   |
++----+------+------+
+6 rows in set (0.00 sec)
+
+select case when trx='PR' then 'PAYMENT' else 'PURCHASE' end trx_type,
+case when trx='PY' then -amt else amt end as amt
+from AT;
+
+
+
+
+

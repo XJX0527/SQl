@@ -1,0 +1,25 @@
+mysql> #去极大极小值计算均值---not in + 子查询 + min + max
+mysql> select avg(sal)
+    -> from emp
+    -> where sal not in(
+    -> (select min(sal) from emp),
+    -> (select max(sal) from emp)
+    -> );
++-----------+
+| avg(sal)  |
++-----------+
+| 1935.4167 |
++-----------+
+1 row in set (0.02 sec)
+============若极大极小值只有一个，只想去掉一个如下操作即可===
+mysql> select (sum(sal)-min(sal)-max(sal))/(count(*)-2) as avg
+    -> from emp;
++-----------+
+| avg       |
++-----------+
+| 1935.4167 |
++-----------+
+1 row in set (0.00 sec)
+==
+select (sum(sal)-min(sal)-max(sal))/(count(*)-2) as avg
+from emp;

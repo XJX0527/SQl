@@ -1,0 +1,12 @@
+mysql> #计算百分比---cast函数：转换字符串类型，decimal：数据精度更高的字符类型
+#deptno=10的部门占总工资比
+mysql> select (cast(sum(case when deptno=10 then sal else 0 end)
+    -> as decimal)/sum(sal)
+    -> )*100 as pct
+    -> from emp;
++---------+
+| pct     |
++---------+
+| 30.1464 |
++---------+
+1 row in set (0.01 sec)

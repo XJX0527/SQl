@@ -1,0 +1,38 @@
+mysql> #计算行数--count与*
+mysql> select count(*)
+    -> from emp;
++----------+
+| count(*) |
++----------+
+|       14 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select count(*),count(deptno),count('helllo')
+    -> from emp;
++----------+---------------+-----------------+
+| count(*) | count(deptno) | count('helllo') |
++----------+---------------+-----------------+
+|       14 |            14 |              14 |
++----------+---------------+-----------------+
+1 row in set (0.00 sec)
+
+mysql> select count(*),count(deptno),count('helllo')
+    -> from emp
+    -> group by deptno;
++----------+---------------+-----------------+
+| count(*) | count(deptno) | count('helllo') |
++----------+---------------+-----------------+
+|        3 |             3 |               3 |
+|        5 |             5 |               5 |
+|        6 |             6 |               6 |
++----------+---------------+-----------------+
+3 rows in set (0.00 sec)
+
+mysql> select count('hello');
++----------------+
+| count('hello') |
++----------------+
+|              1 |
++----------------+
+1 row in set (0.00 sec)

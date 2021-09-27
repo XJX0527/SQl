@@ -1,0 +1,29 @@
+mysql> #计算平均值-avg()函数
+mysql> select avg(sal) from emp;
++-----------+
+| avg(sal)  |
++-----------+
+| 2073.2143 |
++-----------+
+1 row in set (0.00 sec)
+
+mysql> select avg(sal)
+    -> from emp
+    -> group by deptno;
++-----------+
+| avg(sal)  |
++-----------+
+| 2916.6667 |
+| 2175.0000 |
+| 1566.6667 |
++-----------+
+3 rows in set (0.02 sec)
+
+mysql> select avg(coalesce(sal,0))
+    -> from emp;
++----------------------+
+| avg(coalesce(sal,0)) |
++----------------------+
+|            2073.2143 |
++----------------------+
+1 row in set (0.00 sec)

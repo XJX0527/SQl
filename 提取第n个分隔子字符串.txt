@@ -1,6 +1,6 @@
 mysql> #提取第n个分隔子字符串---与遍历字符串有相通之处
 ==================创建视图=============
-mysql> create view VV as
+mysql> create view V as
     -> select 'mo,larry,curly' as name
     -> from t1
     -> union all
@@ -8,7 +8,7 @@ mysql> create view VV as
     -> from t1;
 Query OK, 0 rows affected (0.01 sec)
 
-mysql> select* from VV;
+mysql> select* from V;
 +--------------------------------+
 | name                           |
 +--------------------------------+
@@ -17,33 +17,21 @@ mysql> select* from VV;
 +--------------------------------+
 2 rows in set (0.00 sec)
 ==============提取每一行的第二个名字=============
-mysql> select iter.pos,src.name name1,
-    -> substring_index(src.name,',',iter.pos)name2,
-    -> substring_index(
-    -> substring_index(src.name,',',iter.pos),',',-1)name3
-    -> from(select id pos from t10)iter,
-    -> v src
-    -> where iter.pos<=
-    -> length(src.name)-length(replace(src.name,',',''))
-    -> and iter.pos=2;
-+------+--------------------------------+-----------+-------+
-| pos  | name1                          | name2     | name3 |
-+------+--------------------------------+-----------+-------+
-|    2 | mo,larry,curly                 | mo,larry  | larry |
-|    2 | tina,gina,jauntia,regina,leena | tina,gina | gina  |
-+------+--------------------------------+-----------+-------+
-2 rows in set (0.00 sec)
-======有问题===
 select name
 from(
 select iter.pos,
 substring_index(
 substring_index(src.name,',',iter.pos),',',-1) name
-from VV src，
-(select id pos from t10) iter，
-where iter.pos<=length(src.name)-length(replace(src.name,',',''))
+from V src,
+(select id pos from t10) iter,
+where iter.pos<=length(src.name)+1-length(replace(src.name,',',''))
 )x
 where iter.pos=2;
+
+
+select length('mo,larry,curly')+1-length(replace('mo,larry,curly',',',''));
+
+
 
 
 

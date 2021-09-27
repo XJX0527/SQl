@@ -1,0 +1,13 @@
+mysql> #累计乘积---子查询（与和相同）
+mysql> select exp(sum(ln(sal2)))
+    -> from(select e.ename as ename1,e.empno as empno1,e.sal as sal1,
+    -> d.ename as ename2,d.empno as empno2,d.sal as sal2
+    -> from emp e,emp d
+    -> where d.empno<=e.empno
+    -> and e.empno=7566)x;
++--------------------+
+| exp(sum(ln(sal2))) |
++--------------------+
+|  4759999999999.991 |
++--------------------+
+1 row in set (0.01 sec)

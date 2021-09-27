@@ -1,0 +1,24 @@
+mysql> #求和----sum
+mysql> select sum(sal)
+    -> from emp
+    -> group by deptno;
++----------+
+| sum(sal) |
++----------+
+|     8750 |
+|    10875 |
+|     9400 |
++----------+
+3 rows in set (0.01 sec)
+mysql> select sum(sal)
+    -> from emp
+    -> group by deptno
+    -> order by 1;
++----------+
+| sum(sal) |
++----------+
+|     8750 |
+|     9400 |
+|    10875 |
++----------+
+3 rows in set (0.00 sec)

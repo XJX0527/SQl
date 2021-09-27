@@ -1,0 +1,28 @@
+mysql> #累计求和--子查询
+mysql> select e.ename as ename1,e.empno as empno1,e.sal as sal1,
+    -> d.ename as ename2,d.empno as empno2,d.sal as sal2
+    -> from emp e,emp d
+    -> where d.empno<=e.empno
+    -> and e.empno=7566;
++--------+--------+------+--------+--------+------+
+| ename1 | empno1 | sal1 | ename2 | empno2 | sal2 |
++--------+--------+------+--------+--------+------+
+| JONES  |   7566 | 2975 | SMITH  |   7369 |  800 |
+| JONES  |   7566 | 2975 | ALLEN  |   7499 | 1600 |
+| JONES  |   7566 | 2975 | WARD   |   7521 | 1250 |
+| JONES  |   7566 | 2975 | JONES  |   7566 | 2975 |
++--------+--------+------+--------+--------+------+
+4 rows in set (0.01 sec)
+========================
+mysql> select sum(sal2)
+    -> from(select e.ename as ename1,e.empno as empno1,e.sal as sal1,
+    -> d.ename as ename2,d.empno as empno2,d.sal as sal2
+    -> from emp e,emp d
+    -> where d.empno<=e.empno
+    -> and e.empno=7566)x;
++-----------+
+| sum(sal2) |
++-----------+
+|      6625 |
++-----------+
+1 row in set (0.00 sec)

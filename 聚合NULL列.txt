@@ -1,0 +1,12 @@
+mysql> #聚合NULL列---coalesce
+mysql> select avg(coalesce(comm,0)) as avg_comm,deptno
+    -> from emp
+    -> group by deptno;
++----------+--------+
+| avg_comm | deptno |
++----------+--------+
+|   0.0000 |     10 |
+|   0.0000 |     20 |
+| 366.6667 |     30 |
++----------+--------+
+3 rows in set (0.00 sec)

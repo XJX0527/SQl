@@ -1,0 +1,18 @@
+mysql> #计算累计差---子查询
+mysql> select a.empno,a.ename,a.sal,
+    -> (select case when a.empno=min(b.empno) then sum(b.sal)
+    -> else sum(-b.sal)
+    -> end
+    -> from emp b
+    -> where b.empno<=a.empno
+    -> and b.deptno=a.deptno) as rnk
+    -> from emp a
+    -> where a.deptno=10;
++-------+--------+------+-------+
+| empno | ename  | sal  | rnk   |
++-------+--------+------+-------+
+|  7782 | CLARK  | 2450 |  2450 |
+|  7839 | KING   | 5000 | -7450 |
+|  7934 | MILLER | 1300 | -8750 |
++-------+--------+------+-------+
+3 rows in set (0.01 sec)
