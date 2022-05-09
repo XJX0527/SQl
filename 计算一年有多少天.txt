@@ -1,0 +1,39 @@
+mysql> #计算一年有多少天--datediff + adddate + dayofyear
+dayofyear()返该天为该年的第几天
+===========================
+mysql> select datediff((curr_year+interval 1 year),curr_year)
+    -> from(
+    -> select adddate(current_date,-dayofyear(current_date)+1) curr_year
+    -> from t1
+    -> )x;
++-------------------------------------------------+
+| datediff((curr_year+interval 1 year),curr_year) |
++-------------------------------------------------+
+|                                             365 |
++-------------------------------------------------+
+1 row in set (0.02 sec)
+
+=========先返回该年份的第一天，后对该年份加一年，后计算差值即可============
+mysql> select adddate(current_date,-dayofyear(current_date)+1);
++--------------------------------------------------+
+| adddate(current_date,-dayofyear(current_date)+1) |
++--------------------------------------------------+
+| 2021-01-01                                       |
++--------------------------------------------------+
+1 row in set (0.00 sec)
+=============================
+mysql> select dayofyear(current_date);
++-------------------------+
+| dayofyear(current_date) |
++-------------------------+
+|                     275 |
++-------------------------+
+1 row in set (0.00 sec)
+============================
+
+select datediff((curr_year+interval 1 year),curr_year)
+from(
+select adddate(current_date,-dayofyear(current_date)+1) curr_year
+from t1
+)x;
+

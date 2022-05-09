@@ -1,0 +1,17 @@
+mysql> #识别互逆的记录---笛卡尔积
+
+select v1.*
+from V v1,V v2
+where v1.test1=v2.test2
+and v1.test2=v2.test1;
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,51 @@
+mysql> #年月日加减法---interval
+mysql> #interval：关键字--表示时间间隔；函数---比较函数
+mysql> select hiredate
+    -> from emp
+    -> where deptno=10;
++------------+
+| hiredate   |
++------------+
+| 1981-06-09 |
+| 1981-11-17 |
+| 1982-01-23 |
++------------+
+3 rows in set (0.00 sec)
+===================
+mysql> select hiredate-interval 5 day as hd_minus_5D,
+    -> hiredate+interval 5 day as hd_plus_5D,
+    -> hiredate-interval 5 month as hd_minus_5M,
+    -> hiredate+interval 5 month as hd_plus_5M,
+    -> hiredate-interval 5 year as hd_minus_5Y,
+    -> hiredate+interval 5 year as hd_plus_5Y
+    -> from emp
+    -> where deptno=10;
++-------------+------------+-------------+------------+-------------+------------+
+| hd_minus_5D | hd_plus_5D | hd_minus_5M | hd_plus_5M | hd_minus_5Y | hd_plus_5Y |
++-------------+------------+-------------+------------+-------------+------------+
+| 1981-06-04  | 1981-06-14 | 1981-01-09  | 1981-11-09 | 1976-06-09  | 1986-06-09 |
+| 1981-11-12  | 1981-11-22 | 1981-06-17  | 1982-04-17 | 1976-11-17  | 1986-11-17 |
+| 1982-01-18  | 1982-01-28 | 1981-08-23  | 1982-06-23 | 1977-01-23  | 1987-01-23 |
++-------------+------------+-------------+------------+-------------+------------+
+3 rows in set (0.01 sec)
+
+
+select hiredate-interval 5 day as hd_minus_5D,
+hiredate+interval 5 day as hd_plus_5D,
+hiredate-interval 5 month as hd_minus_5M,
+hiredate+interval 5 month as hd_plus_5M,
+hiredate-interval 5 year as hd_minus_5Y,
+hiredate+interval 5 year as hd_plus_5Y
+from emp
+where deptno=10;
+
+
+
+
+
+
+
+
+
+
+

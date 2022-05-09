@@ -1,0 +1,52 @@
+mysql> #查出未来的行
+============每一位员工入职之后，后面一个人的hiredate============
+============入职时间更晚，工资更高的第一个人的hiredate===========
+mysql> select a.ename,a.sal,a.hiredate,
+    -> (select min(hiredate) from emp b
+    -> where b.hiredate>a.hiredate
+    -> and b.sal>a.sal)as next_sal_grtr,
+    -> (select min(hiredate) from emp b
+    -> where b.hiredate >a.hiredate)as next_hire
+    -> from emp a;
++--------+------+------------+---------------+------------+
+| ename  | sal  | hiredate   | next_sal_grtr | next_hire  |
++--------+------+------------+---------------+------------+
+| SMITH  |  800 | 1980-12-17 | 1981-02-20    | 1981-02-20 |
+| ALLEN  | 1600 | 1981-02-20 | 1981-04-02    | 1981-02-22 |
+| WARD   | 1250 | 1981-02-22 | 1981-04-02    | 1981-04-02 |
+| JONES  | 2975 | 1981-04-02 | 1981-11-17    | 1981-05-01 |
+| MARTIN | 1250 | 1981-09-28 | 1981-11-17    | 1981-11-17 |
+| BLAKE  | 2850 | 1981-05-01 | 1981-11-17    | 1981-06-09 |
+| CLARK  | 2450 | 1981-06-09 | 1981-11-17    | 1981-09-08 |
+| SCOTT  | 3000 | 1982-12-09 | NULL          | 1983-01-12 |
+| KING   | 5000 | 1981-11-17 | NULL          | 1981-12-03 |
+| TURNER | 1500 | 1981-09-08 | 1981-11-17    | 1981-09-28 |
+| ADAMS  | 1100 | 1983-01-12 | NULL          | NULL       |
+| JAMES  |  950 | 1981-12-03 | 1982-01-23    | 1982-01-23 |
+| FORD   | 3000 | 1981-12-03 | NULL          | 1982-01-23 |
+| MILLER | 1300 | 1982-01-23 | 1982-12-09    | 1982-12-09 |
++--------+------+------------+---------------+------------+
+14 rows in set (0.01 sec)
+
+=======
+mysql> select ename,sal,hiredate
+    -> from(
+    -> select a.ename,a.sal,a.hiredate,
+    -> (select min(hiredate) from emp b
+    -> where b.hiredate>a.hiredate
+    -> and b.sal>a.sal) as next_sal_grtr,
+    -> (select min(hiredate) from emp b
+    -> where b.hiredate>a.hiredate) as next_hire
+    -> from emp a
+    -> )x
+    -> where next_sal_grtr=next_hire;
++--------+------+------------+
+| ename  | sal  | hiredate   |
++--------+------+------------+
+| SMITH  |  800 | 1980-12-17 |
+| WARD   | 1250 | 1981-02-22 |
+| MARTIN | 1250 | 1981-09-28 |
+| JAMES  |  950 | 1981-12-03 |
+| MILLER | 1300 | 1982-01-23 |
++--------+------+------------+
+5 rows in set (0.00 sec)

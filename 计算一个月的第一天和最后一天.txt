@@ -1,0 +1,18 @@
+mysql> #计算一个月的第一天和最后一天---last_day + day + date_add
+day：返回该天是该月的第几天
+========================
+mysql> select date_add(current_date,interval -day(current_date) day)firstday,
+    -> last_day(current_date) lastday
+    -> from t1;
++------------+------------+
+| firstday   | lastday    |
++------------+------------+
+| 2021-09-30 | 2021-10-31 |
++------------+------------+
+1 row in set (0.00 sec)
+==================
+select date_add(current_date,interval -day(current_date) day)firstday,
+last_day(current_date) lastday
+from t1;
+
+

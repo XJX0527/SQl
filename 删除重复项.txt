@@ -1,0 +1,29 @@
+mysql> #删除重复项--distinct or group by
+
+mysql> select distinct(job)
+    -> from emp;
++-----------+
+| job       |
++-----------+
+| CLERK     |
+| SALESMAN  |
+| MANAGER   |
+| ANALYST   |
+| PRESIDENT |
++-----------+
+5 rows in set (0.01 sec)
+=======================
+mysql> select job
+    -> from emp
+    -> group by job;
++-----------+
+| job       |
++-----------+
+| ANALYST   |
+| CLERK     |
+| MANAGER   |
+| PRESIDENT |
+| SALESMAN  |
++-----------+
+5 rows in set (0.00 sec)
+

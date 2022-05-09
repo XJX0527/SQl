@@ -1,0 +1,18 @@
+mysql> #列出一年中所有的星期五
+=====先列出每一天，然后再找出星期五======
+select dy
+from (
+select adddate(x.dy,interval t500.id-1 day)dy
+from(
+select dy,year(dy) yr
+from(
+select adddate(
+adddate(current_date,interval -dayofyear(current_date) day),
+interval 1 day) dy
+from t1
+)tmp1
+)x,
+t500
+where year(adddate x.dy,interval t500.id-1 day))=x.yr
+)tmp2
+where dayname(dy)='Firday'

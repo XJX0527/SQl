@@ -1,0 +1,28 @@
+mysql> #两个日期之间的天数---datediff()函数
+mysql> select datediff(ward_hd,allen_hd)
+    -> from
+    -> (select hiredate as ward_hd
+    -> from emp
+    -> where ename='WARD'
+    -> )x,
+    -> (select hiredate as allen_hd
+    -> from emp
+    -> where ename='ALLEN'
+    -> )y;
++----------------------------+
+| datediff(ward_hd,allen_hd) |
++----------------------------+
+|                          2 |
++----------------------------+
+1 row in set (0.00 sec)
+======
+select datediff(ward_hd,allen_hd)
+from
+(select hiredate as ward_hd
+from emp
+where ename='WARD'
+)x,
+(select hiredate as allen_hd
+from emp
+where ename='ALLEN'
+)y;

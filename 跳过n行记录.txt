@@ -1,0 +1,42 @@
+mysql> #跳过n行记录
+mysql> select x.ename,rn
+    -> from(
+    -> select a.ename,(select count(*)from emp b where b.ename<=a.ename) as rn
+    -> from emp a)x
+    -> where mod(x.rn,2)=1;
++--------+------+
+| ename  | rn   |
++--------+------+
+| JONES  |    7 |
+| MARTIN |    9 |
+| BLAKE  |    3 |
+| SCOTT  |   11 |
+| TURNER |   13 |
+| ADAMS  |    1 |
+| FORD   |    5 |
++--------+------+
+7 rows in set (0.00 sec)
+================================
+mysql> select x.ename,rn
+    -> from(
+    -> select a.ename,(select count(*)from emp b where b.ename<=a.ename) as rn
+    -> from emp a)x;
++--------+------+
+| ename  | rn   |
++--------+------+
+| SMITH  |   12 |
+| ALLEN  |    2 |
+| WARD   |   14 |
+| JONES  |    7 |
+| MARTIN |    9 |
+| BLAKE  |    3 |
+| CLARK  |    4 |
+| SCOTT  |   11 |
+| KING   |    8 |
+| TURNER |   13 |
+| ADAMS  |    1 |
+| JAMES  |    6 |
+| FORD   |    5 |
+| MILLER |   10 |
++--------+------+
+14 rows in set (0.00 sec)

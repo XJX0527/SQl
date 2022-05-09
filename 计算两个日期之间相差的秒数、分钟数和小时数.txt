@@ -1,0 +1,30 @@
+mysql> #计算两个日期之间相差的秒数、分钟数和小时数
+mysql> select datediff(ward_hd,allen_hd)*24 hr,
+    -> datediff(ward_hd,allen_hd)*24*60 min,
+    -> datediff(ward_hd,allen_hd)*24*60*60 sec
+    -> from (
+    -> select max(case when ename='WARD' then hiredate end) as ward_hd,
+    -> max(case when ename='ALLEN' then hiredate end) as allen_hd
+    -> from emp
+    -> )x;
++------+------+--------+
+| hr   | min  | sec    |
++------+------+--------+
+|   48 | 2880 | 172800 |
++------+------+--------+
+1 row in set (0.00 sec)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

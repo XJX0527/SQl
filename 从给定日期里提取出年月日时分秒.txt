@@ -1,0 +1,14 @@
+mysql> #从给定日期里提取出年月日时分秒---date_format
+mysql> select date_format(current_timestamp,'%k') hr,
+    -> date_format(current_timestamp,'%i') min,
+    -> date_format(current_timestamp,'%s') sec,
+    -> date_format(current_timestamp,'%d') dy,
+    -> date_format(current_timestamp,'%m') mon,
+    -> date_format(current_timestamp,'%Y') yr
+    -> from t1;
++------+------+------+------+------+------+
+| hr   | min  | sec  | dy   | mon  | yr   |
++------+------+------+------+------+------+
+| 15   | 16   | 21   | 02   | 10   | 2021 |
++------+------+------+------+------+------+
+1 row in set (0.00 sec)

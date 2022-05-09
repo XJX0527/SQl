@@ -1,0 +1,11 @@
+mysql> #找出最大和最小的记录
+mysql> select ename
+    -> from emp
+    -> where sal in((select min(sal) from emp),(select max(sal) from emp));
++-------+
+| ename |
++-------+
+| SMITH |
+| KING  |
++-------+
+2 rows in set (0.00 sec)

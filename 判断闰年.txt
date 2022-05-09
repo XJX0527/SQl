@@ -1,0 +1,76 @@
+mysql> #判断闰年---用2月是否有29天来判断，last_day()返回该月的最后一天，
+dayofyear()返该天为该年的第几天
+=========
+mysql> select day(
+    -> last_day(
+    -> date_add(
+    -> date_add(
+    -> date_add(current_date,
+    -> interval-dayofyear(current_date) day),
+    -> interval 1 day),
+    -> interval 1 month))) dy
+    -> from t1;
++------+
+| dy   |
++------+
+|   28 |
++------+
+1 row in set (0.00 sec)
+====================
+mysql> select dayofyear(current_date);
++-------------------------+
+| dayofyear(current_date) |
++-------------------------+
+|                     272 |
++-------------------------+
+1 row in set (0.00 sec)
+===========================
+mysql> select current_date;
++--------------+
+| current_date |
++--------------+
+| 2021-09-29   |
++--------------+
+1 row in set (0.00 sec)
+==============================
+mysql> select date_add(current_date,interval-dayofyear(current_date) day);
++-------------------------------------------------------------+
+| date_add(current_date,interval-dayofyear(current_date) day) |
++-------------------------------------------------------------+
+| 2020-12-31                                                  |
++-------------------------------------------------------------+
+1 row in set (0.00 sec)
+=================================
+mysql> select
+    -> date_add(
+    -> date_add(
+    -> current_date, interval-dayofyear(current_date) day
+    -> )
+    -> ,interval 1 day);
++-------------------------------------------------------------------------------------------+
+| date_add(
+date_add(
+current_date, interval-dayofyear(current_date) day
+)
+,interval 1 day) |
++-------------------------------------------------------------------------------------------+
+| 2021-01-01                                                                                |
++-------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+=============================================
+mysql> select
+    -> date_add(
+    -> date_add(
+    -> date_add(current_date, interval-dayofyear(current_date) day)
+    -> ,interval 1 day),
+    -> interval 1 month);
++----------------------------------------------------------------------------------------------------------------------+
+| date_add(
+date_add(
+date_add(current_date, interval-dayofyear(current_date) day)
+,interval 1 day),
+interval 1 month) |
++----------------------------------------------------------------------------------------------------------------------+
+| 2021-02-01                                                                                                           |
++----------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)

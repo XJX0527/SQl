@@ -1,0 +1,36 @@
+mysql> #在外连接查询里使用or逻辑
+mysql> select e.ename,d.deptno,d.dname,d.loc
+    -> from dept d left join emp e
+    -> on(d.deptno=e.deptno
+    -> and (e.deptno=10 or e.deptno=20))
+    -> order by 2;
++--------+--------+------------+----------+
+| ename  | deptno | dname      | loc      |
++--------+--------+------------+----------+
+| MILLER |     10 | ACCOUNTING | NEW YORK |
+| CLARK  |     10 | ACCOUNTING | NEW YORK |
+| KING   |     10 | ACCOUNTING | NEW YORK |
+| FORD   |     20 | RESEARCH   | DALLAS   |
+| JONES  |     20 | RESEARCH   | DALLAS   |
+| SCOTT  |     20 | RESEARCH   | DALLAS   |
+| ADAMS  |     20 | RESEARCH   | DALLAS   |
+| SMITH  |     20 | RESEARCH   | DALLAS   |
+| NULL   |     30 | SALES      | CHICAGO  |
+| NULL   |     40 | OPERATIONS | BOSTON   |
++--------+--------+------------+----------+
+10 rows in set (0.01 sec)
+
+select e.ename,d.deptno,d.dname,d.loc
+from dept d left join emp e
+on(d.deptno=e.deptno
+and (e.deptno=10 or e.deptno=20))
+order by 2;
+
+
+
+
+
+
+
+
+

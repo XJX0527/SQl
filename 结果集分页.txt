@@ -1,0 +1,31 @@
+mysql> #结果集分页--limit + offset
+offset=0表示从第一行开始读取，=5表示从第6行开始读取
+=====展示前五行====
+mysql> select sal
+    -> from emp
+    -> order by sal limit 5 offset 0
+    -> ;
++------+
+| sal  |
++------+
+|  800 |
+|  950 |
+| 1100 |
+| 1250 |
+| 1250 |
++------+
+5 rows in set (0.01 sec)
+====展示接下来的五行====
+mysql> select sal
+    -> from emp
+    -> order by sal limit 5 offset 5;
++------+
+| sal  |
++------+
+| 1300 |
+| 1500 |
+| 1600 |
+| 2450 |
+| 2850 |
++------+
+5 rows in set (0.00 sec)

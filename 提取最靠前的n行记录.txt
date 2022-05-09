@@ -1,0 +1,43 @@
+mysql> #提取最靠前的n行记录
+mysql> select (select count(distinct b.sal) from emp b
+    -> where a.sal<=b.sal)as rnk,a.sal,a.ename
+    -> from emp a;
++------+------+--------+
+| rnk  | sal  | ename  |
++------+------+--------+
+|   12 |  800 | SMITH  |
+|    6 | 1600 | ALLEN  |
+|    9 | 1250 | WARD   |
+|    3 | 2975 | JONES  |
+|    9 | 1250 | MARTIN |
+|    4 | 2850 | BLAKE  |
+|    5 | 2450 | CLARK  |
+|    2 | 3000 | SCOTT  |
+|    1 | 5000 | KING   |
+|    7 | 1500 | TURNER |
+|   10 | 1100 | ADAMS  |
+|   11 |  950 | JAMES  |
+|    2 | 3000 | FORD   |
+|    8 | 1300 | MILLER |
++------+------+--------+
+14 rows in set (0.00 sec)
+
+=============================
+mysql> select ename,sal
+    -> from(
+    -> select (select count(distinct b.sal) from emp b
+    -> where a.sal<=b.sal)as rnk,a.sal,a.ename
+    -> from emp a
+    -> )x
+    -> where rnk<=5;
++-------+------+
+| ename | sal  |
++-------+------+
+| JONES | 2975 |
+| BLAKE | 2850 |
+| CLARK | 2450 |
+| SCOTT | 3000 |
+| KING  | 5000 |
+| FORD  | 3000 |
++-------+------+
+6 rows in set (0.00 sec)

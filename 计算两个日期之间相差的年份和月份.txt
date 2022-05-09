@@ -1,0 +1,45 @@
+mysql> #计算两个日期之间相差的年和月---计算时：将大化小，罗列时：将小化大
+=======================子查询的嵌套=======
+mysql> select mnth,round(mnth/12) as year
+    -> from(
+    -> select
+    -> (year(max_hd)-year(min_hd))*12+month(max_hd)-month(min_hd) as mnth
+    -> from(
+    -> select min(hiredate) as min_hd,max(hiredate) as max_hd
+    -> from emp)x
+    -> )y;
++------+------+
+| mnth | year |
++------+------+
+|   25 |    2 |
++------+------+
+1 row in set (0.00 sec)
+===============================找到目标
+mysql> select min(hiredate) as min_hd,max(hiredate) as max_hd
+    -> from emp
+    -> ;
++------------+------------+
+| min_hd     | max_hd     |
++------------+------------+
+| 1980-12-17 | 1983-01-12 |
++------------+------------+
+1 row in set (0.00 sec)
+===============================计算mnth
+mysql> select mnth
+    -> from(
+    -> select
+    -> (year(max_hd)-year(min_hd))*12+month(max_hd)-month(min_hd) as mnth
+    -> from(
+    -> select min(hiredate) as min_hd,max(hiredate) as max_hd
+    -> from emp)x
+    -> )y;
++------+
+| mnth |
++------+
+|   25 |
++------+
+1 row in set (0.00 sec)
+==============================
+
+
+
